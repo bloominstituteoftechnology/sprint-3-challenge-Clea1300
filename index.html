@@ -38,14 +38,14 @@
   <!-- The first script tag loads a library called lodash that helps with testing -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
   <script id="challenge">
-    // In CHALLENGES 1-4 you will write JavaScript classes
+// In CHALLENGES 1-4 you will write JavaScript classes
 
     // ❗ Do not rename the classes provided
     // ❗ Do not alter the position of the script tags
     // ❗ Debug properly using the Console
 
     // 👉 CHALLENGE 1 - Integers
-    class Integers {
+    class Integers {    
       // 🧠 Constructor takes **any** number of arguments, which are integers
       // 🧠 Instances have an `ints` property which is an array holding the integers above in the same order
       // 🧠 Implement a `getAll` method which returns the data held in the `ints` property
@@ -59,6 +59,46 @@
       // ❗ WARNING: except for `getAllReversed`, methods must respect the order of the integers
       // ❗ WARNING: note that except for push and pop, the methods don't change the `ints` property
 
+      
+      constructor(...args) {
+        this.ints = args;
+      }        
+
+    getAll() {
+      return this.ints;
+    }
+
+    getEvens() {
+      return this.ints.filter(int => 
+        int % 2 === 0);
+    }
+    
+    getNegatives() {
+      return this.ints.filter(num => 
+        num < 0);
+    }
+    getAllSquared() {
+      return this.ints.map(num => num 
+      ** 2);
+    }
+
+    pop() {
+      return this.ints.pop();
+    }
+
+    push(int) {
+      this.ints.push(int);
+      return this.ints;
+    }
+
+    getEveryNth(n) {
+      return this.ints.filter((_,
+    index) => index % n === 0);
+    }
+
+    getAllReversed() {
+      return[...this.ints].reverse();
+    }
     }
 
     // 👉 CHALLENGE 2 NerfGun
@@ -76,8 +116,36 @@
       //      * When engaging the safety, return "Safety enabled!"
       //      * When disengaging the safety, return "Safety disabled!"
       // 🌟 HINT: instances need to keep track of their maximum capacity as well as their current capacity
+       
+  constructor(totalProjectiles) {
+    this.totalProjectiles = totalProjectiles;
+    this.currentProjectiles = totalProjectiles;
+    this.safetyOn = true;
+  }
 
+  shoot() {
+    if (this.safetyOn || this.currentProjectiles === 0) {
+      return "Click!";
+    } else {
+      this.currentProjectiles--;
+      return "Bang!";
     }
+  }
+
+  reload(num) {
+    if (typeof num !== "number" || num <= 0) {
+      return "Error reloading!";
+    }
+    this.currentProjectiles = Math.min(this.totalProjectiles, this.currentProjectiles + num);
+    return `${this.currentProjectiles} projectiles left!`;
+  }
+
+  toggleSafety() {
+    this.safetyOn = !this.safetyOn;
+    return this.safetyOn ? "Safety enabled!" : "Safety disabled!";
+  }
+}
+
 
     // 👉 CHALLENGE 3 EBook
     class EBook {
@@ -95,8 +163,26 @@
       //    ebook.next() // returns null
       // 🌟 HINT: remember about the `slice` method which strings and arrays have
       // ❗ Feel free to implement `back`, although this is not required nor graded
-
+     
+      constructor(text, charsPerPage) {
+    this.text = text;
+    this.charsPerPage = charsPerPage;
+    this.currentPage = 0;
+  }
+  next() {
+    const start = this.currentPage * this.charsPerPage;
+    const end = start + this.charsPerPage;
+    const page = this.text.slice(start, end);
+    
+    if (page) {
+      this.currentPage++;
+      return page;
+    } else {
+      return null;
     }
+    }
+  }
+    
 
     // 👉 CHALLENGE 4 AntFarm
     class AntFarm {
@@ -130,9 +216,46 @@
       //      console.log(list) // prints ["a"]
       // 👉 HINT: if you are not feeling confident with map and filter, solve the problem with for loops,
       //      and with the piece of mind of all tests passing, refactor to use map/filter
+     
+      
+        
 
+        constructor(...antNames) {
+        this.ants = antNames.map(name => ({ name, health: 100 }));
+    }
+  
+    work() {
+      const antCount = this.ants.length
+        if (!antCount) {
+            return "No ants here. Did you work them to death?";
+        }
+
+        this.ants= this.ants.map(ant =>{
+           ant.health -= 20
+          return ant
+        });
+        this.ants = this.ants.filter(ant => {
+          return ant.health > 0});
+
+        return `${antCount} ants starting work!`;
     }
 
+    feed(antName) {
+        let found = 0;
+        this.ants = this.ants.map(ant => {
+            if (ant.name === antName) {
+                found++ 
+                ant.health += 15
+            }
+            return ant;
+        });
+
+          return found ? "Yum!": `${antName} not found!`
+          
+      }
+    }
+
+  
     // 🧪 TESTS, do not make any changes below this line ===================
     // 🧪 TESTS, do not make any changes below this line ===================
     // 🧪 TESTS, do not make any changes below this line ===================
